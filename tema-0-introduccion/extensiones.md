@@ -1,22 +1,26 @@
-# Práctica 00. Extensiones de Visual Studio Code para la asignatura  
+# Práctica 00. Extensiones de Visual Studio Code para la asignatura
 
 ## Objetivos
 
-El objetivo de esta práctica es encontrar las mejores extensiones para VS Code necesarias para la asignatura 
+El objetivo de esta práctica es identificar las extensiones más útiles de Visual Studio Code para el desarrollo en la asignatura, con especial atención a JavaScript, TypeScript, React y React Native.
 
-### Javascript y Typescript
-- **ESLint**: Analiza tu código en busca de errores y problemas de estilo antes de ejecutarlo.
-- **Prettier**: Formatea tu código automáticamente para mantenerlo ordenado y con la misma estructura.
-- **Error Lens**: Muestra los errores y advertencias directamente en la misma línea de código para detectarlos al instante.
+### JavaScript y TypeScript
+- **ESLint**: Analiza el código en busca de errores y problemas de estilo antes de ejecutarlo.
+- **Prettier**: Formatea el código automáticamente para mantener un estilo uniforme y legible.
+- **Error Lens**: Muestra errores y advertencias directamente sobre la línea de código para detectarlos al instante.
 
 ### React
-- **Prettier:** Code formatter: Formatea tu código de manera consistente cada vez que guardas un archivo.
-- **ESLint:** Encuentra y corrige errores de sintaxis y malas prácticas en tiempo real.
-- **Tailwind CSS IntelliSense:** Ofrece autocompletado y orden lógico de las clases si usas Tailwind CSS en tus proyectos.
-- **Auto Close Tag:** Cierra y renombra etiquetas HTML y JSX de forma automática para evitar errores de estructura
+- **ESLint**: Detecta errores de sintaxis, malas prácticas y problemas de calidad en tiempo real.
+- **Prettier**: Mantiene el código consistente y bien formateado al guardar archivos.
+- **Tailwind CSS IntelliSense**: Ofrece autocompletado y ayuda con la organización de clases si se usa Tailwind CSS.
+- **Auto Close Tag**: Cierra y renombra etiquetas HTML y JSX de forma automática para evitar errores de estructura.
 
 ### Expo y React Native
-- **Expo Tools:** La herramienta oficial de Expo que incluye un depurador integrado y vista previa de archivos nativos
-- **React Native Tools:** Proporciona depuración, comandos de Expo/React Native y soporte para ejecutar la aplicación desde el editor.
-- **Path Intellisense:** Autocompleta las rutas de los archivos de tu proyecto al importar componentes o imágenes
-- **Tailwind CSS IntelliSense:** Muy útil si usas NativeWind para estilizar tus aplicaciones con clases de Tailwind en Expo
+- **Expo Tools**: Proporciona herramientas oficiales de Expo, incluyendo depuración y vista previa de archivos nativos.
+- **React Native Tools**: Ofrece soporte para depurar, ejecutar y gestionar proyectos de Expo y React Native desde el editor.
+- **Path IntelliSense**: Autocompleta rutas de archivos al importar componentes, imágenes u otros recursos.
+- **Tailwind CSS IntelliSense**: Resulta especialmente útil si se usa NativeWind para estilizar aplicaciones con clases de Tailwind en Expo.
+
+## Conclusión
+
+Estas extensiones ayudan a mejorar la productividad, reducir errores y facilitar el desarrollo en proyectos web y móviles. Su uso recomendado permite trabajar con un entorno más ordenado, eficiente y profesional.
