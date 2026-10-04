@@ -12,7 +12,7 @@ const obtenerPokemon = async (busqueda) => {
     throw new Error("Pokémon no encontrado.");
   }
 
-  const datos = await respuesta.json();
+  const datos =  await respuesta.json();
 
   return {
     id: datos.id,

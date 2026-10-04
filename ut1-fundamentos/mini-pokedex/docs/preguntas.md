@@ -102,7 +102,7 @@ Sin `join`, al meter el array en `${}` JS lo convertiría a texto separando los 
 | `try` | El código que **intentamos ejecutar**, donde algo puede fallar |
 | `catch` | Se ejecuta **solo si algo dentro del `try` lanza un error**; recibe ese error como parámetro |
 
-Si no hay error, el `catch` se ignora. Si lo hay, el `try` se corta en ese punto y salta al `catch`.
+Si no hay error, el `catch` se ignora. Si lo hay,  el `try` se corta en ese punto y salta al `catch`.
 
 ```javascript
 try {
