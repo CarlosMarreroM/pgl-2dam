@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini-Pokédex</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="contenedor">
+    <h1>Mini-Pokédex</h1>
+
+    <p class="introduccion">
+      Introduce el nombre o el número de un Pokémon.
+    </p>
+
+    <form id="formulario-busqueda" class="buscador">
+      <label for="busqueda">Nombre o número</label>
+
+      <div class="buscador__controles">
+        <input
+          id="busqueda"
+          name="busqueda"
+          type="text"
+          placeholder="Ejemplo: pikachu o 25"
+          autocomplete="off"
+        >
+
+        <button type="submit">Buscar</button>
+      </div>
+    </form>
+
+    <p id="mensaje" class="mensaje" aria-live="polite"></p>
+
+    <section id="resultado" class="resultado"></section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

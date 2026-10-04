@@ -1,0 +1,152 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem 1rem;
+    font-family: Arial, sans-serif;
+    color: #1f2937;
+    background: #f3f4f6;
+}
+
+.contenedor {
+    width: min(100%, 650px);
+    margin: 0 auto;
+}
+
+h1 {
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #dc2626;
+}
+
+.introduccion {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.buscador {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
+}
+
+.buscador label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.buscador__controles {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.buscador input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.75rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    font: inherit;
+}
+
+.buscador input:focus {
+    border-color: #dc2626;
+    outline: 3px solid rgb(220 38 38 / 20%);
+}
+
+.buscador button {
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: 0.5rem;
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    background: #dc2626;
+    cursor: pointer;
+}
+
+.buscador button:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.buscador button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.mensaje {
+    min-height: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.resultado {
+    display: flex;
+    justify-content: center;
+}
+
+.pokemon {
+    width: min(100%, 360px);
+    padding: 1.5rem;
+    text-align: center;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
+}
+
+.pokemon__imagen {
+    width: 180px;
+    height: 180px;
+    image-rendering: pixelated;
+}
+
+.pokemon__nombre {
+    margin: 0.5rem 0;
+    text-transform: capitalize;
+}
+
+.pokemon__numero {
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.pokemon__datos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.pokemon__datos p {
+    margin: 0;
+    padding: 0.75rem;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+}
+
+.pokemon__tipos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tipo {
+    padding: 0.4rem 0.8rem;
+    color: white;
+    text-transform: capitalize;
+    background: #4b5563;
+    border-radius: 999px;
+}
+
+@media (max-width: 480px) {
+    .buscador__controles {
+        flex-direction: column;
+    }
+}
