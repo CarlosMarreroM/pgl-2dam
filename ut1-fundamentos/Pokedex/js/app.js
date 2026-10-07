@@ -3,6 +3,10 @@ const inputBusqueda = document.querySelector("#busqueda");
 const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const botonBuscar = formulario.querySelector("button");
+const botonCargar = document.querySelector("#boton-cargar");
+
+const TOTAL_POKEMON = 151;
+let pokemons = [];
 
 const obtenerPokemon = async (busqueda) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
@@ -14,18 +18,15 @@ const obtenerPokemon = async (busqueda) => {
 
   const datos =  await respuesta.json();
 
-  return {
-    id: datos.id,
-    nombre: datos.name,
-    imagen: datos.sprites.front_shiny,
-    altura: datos.height,
-    peso: datos.weight,
-    tipos: datos.types.map(({ type }) => type.name),
-  };
+  return new Pokemon(datos);
+
 };
 
-const formatearId = (id) => {
-  return String(id).padStart(3, "0");
+const obtenerTodos = () => {
+  const peticiones = Array.from({ length: TOTAL_POKEMON }, (_, i) =>
+    obtenerPokemon(i + 1)
+  );
+  return Promise.all(peticiones);
 };
 
 const mostrarPokemon = (pokemon) => {
@@ -35,19 +36,19 @@ const mostrarPokemon = (pokemon) => {
 
   resultado.innerHTML = `
     <article class="pokemon">
-      <p class="pokemon__numero">N.º ${formatearId(pokemon.id)}</p>
+      <p class="pokemon__numero">N.º ${pokemon.idFormateado}</p>
 
       <img
         class="pokemon__imagen"
-        src="${pokemon.imagen}"
+        src="${pokemon.spriteFrontal}"
         alt="Imagen de ${pokemon.nombre}"
       >
 
-      <h2 class="pokemon__nombre">${pokemon.nombre}</h2>
+      <h2 class="pokemon__nombre">${pokemon.nombreFormateado}</h2>
 
       <div class="pokemon__datos">
-        <p><strong>Altura</strong><br>${pokemon.altura / 10} m</p>
-        <p><strong>Peso</strong><br>${pokemon.peso / 10} kg</p>
+        <p><strong>Altura</strong><br>${pokemon.altura} m</p>
+        <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
       </div>
 
       <div class="pokemon__tipos">
@@ -84,7 +85,21 @@ formulario.addEventListener("submit", async (evento) => {
   } finally {
     botonBuscar.disabled = false;
   }
+});
 
+botonCargar.addEventListener("click", async () => {
+  mensaje.textContent = "Cargando Pokémon...";
+  resultado.innerHTML = "";
+  botonCargar.disabled = true;
 
-
+  try {
+    pokemons = await obtenerTodos();
+    mensaje.textContent = `Se han cargado ${pokemons.length} Pokémon.`;
+    console.log(pokemons);
+  } catch (error) {
+    pokemons = [];
+    mensaje.textContent =
+      "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
+    botonCargar.disabled = false;
+  }
 });
