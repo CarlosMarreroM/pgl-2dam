@@ -129,3 +129,63 @@ sola al ancho de la pantalla sin necesidad de media queries. El `min(100%,
 ![Tarjeta con cursor](assets/readme/11-tarjeta-hover.png)
 ![Uno y dos tipos](assets/readme/12-tipos.png)
 ![Móvil](assets/readme/13-movil.png)
+
+## 4. Barra de búsqueda y filtros
+
+### Funcionamiento de la búsqueda
+Primero normalizo lo que escribe el usuario con `trim()` y `toLowerCase()`,
+así da igual poner espacios o mayúsculas. Después hay dos casos:
+
+- Si el texto son solo dígitos (lo compruebo con la expresión regular
+  `/^\d+$/`), busco el Pokémon con ese número exacto.
+- Si no, busco el texto como fragmento del nombre con `includes`. Por
+  ejemplo, `char` encuentra a Charmander, Charmeleon y Charizard.
+
+La lista se filtra en vivo con el evento `input`, es decir, se actualiza
+cada vez que escribo una letra. El evento `submit` del formulario (botón
+Buscar o Enter) hace lo mismo, con `preventDefault()` para que la página no
+se recargue.
+
+### Filtro por tipo
+Las opciones del selector no las escribí a mano, se generan con los datos
+cargados en `rellenarSelectorTipos`:
+
+1. `flatMap` junta los tipos de todos los Pokémon en una sola lista.
+2. `new Set(...)` elimina los repetidos.
+3. `sort()` los ordena alfabéticamente.
+
+Con eso creo un `<option>` por cada tipo, más la opción "Todos". El filtro
+se aplica con el evento `change` del selector.
+
+### Combinación de ambos filtros
+Todo está en una única función, `filtrarPokemons`, que lee a la vez el
+cuadro de texto y el selector de tipo y usa `filter` con las dos condiciones
+unidas por `&&`. Un Pokémon solo se muestra si cumple las dos. Si un
+control está vacío, su condición da siempre `true` y no filtra nada.
+Por ejemplo, `char` + tipo `fire` deja solo a los Charmander y compañía.
+Después `actualizarVista` pinta las tarjetas y muestra cuántos se ven
+("Mostrando X de 151") o un aviso si no hay resultados.
+
+### Conservación de funcionalidades anteriores
+La búsqueda por nombre o número de la práctica guiada sigue funcionando
+(`25` y `pikachu` encuentran a Pikachu), pero ahora filtra los datos que ya
+están cargados en el array `pokemons`, así que no hace peticiones nuevas a
+la API. Por eso el buscador y el selector están desactivados hasta que se
+pulsa "Cargar los 151 Pokémon".
+
+### Problemas encontrados y soluciones
+- **El 25 también encontraba el 125:** con `includes` sobre el número, al
+  buscar `25` salían también el 125. Lo solucioné comparando el id de forma
+  exacta cuando el texto son solo dígitos.
+- **Controles antes de cargar:** si se buscaba antes de cargar los Pokémon
+  no había nada que filtrar, así que desactivo el buscador y el selector
+  hasta que la carga termina bien.
+
+### Capturas
+![Pikachu](assets/readme/14-busqueda-pikachu.png)
+![Número 25](assets/readme/15-busqueda-numero.png)
+![Fragmento char](assets/readme/16-busqueda-fragmento.png)
+![Sin resultados](assets/readme/17-sin-resultados.png)
+![Filtro fire](assets/readme/18-filtro-tipo.png)
+![Filtro combinado](assets/readme/19-filtro-combinado.png)
+![Selector de tipos](assets/readme/20-selector-tipos.png)

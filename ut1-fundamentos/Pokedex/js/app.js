@@ -1,13 +1,15 @@
 const formulario = document.querySelector("#formulario-busqueda");
 const inputBusqueda = document.querySelector("#busqueda");
-const mensaje = document.querySelector("#mensaje");
-const resultado = document.querySelector("#resultado");
+const selectTipo = document.querySelector("#filtro-tipo");
 const botonBuscar = formulario.querySelector("button");
 const botonCargar = document.querySelector("#boton-cargar");
+const mensaje = document.querySelector("#mensaje");
 const contenedorTarjetas = document.querySelector("#tarjetas");
 
 const TOTAL_POKEMON = 151;
 let pokemons = [];
+
+/* ---------- Datos ---------- */
 
 const obtenerPokemon = async (busqueda) => {
   const url = `https://pokeapi.co/api/v2/pokemon/${busqueda}`;
@@ -17,10 +19,8 @@ const obtenerPokemon = async (busqueda) => {
     throw new Error("Pokémon no encontrado.");
   }
 
-  const datos =  await respuesta.json();
-
+  const datos = await respuesta.json();
   return new Pokemon(datos);
-
 };
 
 const obtenerTodos = () => {
@@ -30,34 +30,7 @@ const obtenerTodos = () => {
   return Promise.all(peticiones);
 };
 
-const mostrarPokemon = (pokemon) => {
-  const tiposHTML = pokemon.tipos
-    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
-    .join("");
-
-  resultado.innerHTML = `
-    <article class="pokemon">
-      <p class="pokemon__numero">N.º ${pokemon.idFormateado}</p>
-
-      <img
-        class="pokemon__imagen"
-        src="${pokemon.spriteFrontal}"
-        alt="Imagen de ${pokemon.nombre}"
-      >
-
-      <h2 class="pokemon__nombre">${pokemon.nombreFormateado}</h2>
-
-      <div class="pokemon__datos">
-        <p><strong>Altura</strong><br>${pokemon.altura} m</p>
-        <p><strong>Peso</strong><br>${pokemon.peso} kg</p>
-      </div>
-
-      <div class="pokemon__tipos">
-        ${tiposHTML}
-      </div>
-    </article>
-  `;
-};
+/* ---------- Tarjetas ---------- */
 
 const crearTarjetaHTML = (pokemon) => {
   const tiposHTML = pokemon.tipos
@@ -97,43 +70,77 @@ const mostrarTarjetas = (lista) => {
   contenedorTarjetas.innerHTML = lista.map(crearTarjetaHTML).join("");
 };
 
-formulario.addEventListener("submit", async (evento) => {
+/* ---------- Búsqueda y filtros ---------- */
+
+const capitalizar = (texto) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
+const habilitarControles = (activos) => {
+  inputBusqueda.disabled = !activos;
+  selectTipo.disabled = !activos;
+  botonBuscar.disabled = !activos;
+};
+
+const rellenarSelectorTipos = () => {
+  const tipos = [...new Set(pokemons.flatMap((p) => p.tipos))].sort();
+
+  const opciones = tipos
+    .map((tipo) => `<option value="${tipo}">${capitalizar(tipo)}</option>`)
+    .join("");
+
+  selectTipo.innerHTML = `<option value="">Todos</option>${opciones}`;
+};
+
+const filtrarPokemons = () => {
+  const texto = inputBusqueda.value.trim().toLowerCase();
+  const tipo = selectTipo.value;
+
+  const coincideTexto = (pokemon) => {
+    if (!texto) return true;
+    // Si solo hay dígitos, se compara con el número exacto
+    if (/^\d+$/.test(texto)) return pokemon.id === Number(texto);
+    // Si no, se busca el fragmento dentro del nombre
+    return pokemon.nombre.includes(texto);
+  };
+
+  const coincideTipo = (pokemon) => !tipo || pokemon.tipos.includes(tipo);
+
+  return pokemons.filter(
+    (pokemon) => coincideTexto(pokemon) && coincideTipo(pokemon)
+  );
+};
+
+const actualizarVista = () => {
+  const filtrados = filtrarPokemons();
+  mostrarTarjetas(filtrados);
+
+  if (filtrados.length === 0) {
+    mensaje.textContent =
+      "No se ha encontrado ningún Pokémon con esa búsqueda.";
+  } else {
+    mensaje.textContent = `Mostrando ${filtrados.length} de ${pokemons.length} Pokémon.`;
+  }
+};
+
+/* ---------- Eventos ---------- */
+
+formulario.addEventListener("submit", (evento) => {
   evento.preventDefault();
-
-  const busqueda = inputBusqueda.value.trim().toLowerCase();
-
-  if (!busqueda) {
-    mensaje.textContent = "Introduce un nombre o número.";
-    resultado.innerHTML = "";
-    return;
-  }
-
-  mensaje.textContent = "Cargando...";
-  resultado.innerHTML = "";
-  botonBuscar.disabled = true;
-
-  try {
-    const pokemon = await obtenerPokemon(busqueda);
-
-    mostrarPokemon(pokemon);
-    mensaje.textContent = "";
-    inputBusqueda.value = "";
-    inputBusqueda.focus();
-  } catch (error) {
-    mensaje.textContent = error.message;
-  } finally {
-    botonBuscar.disabled = false;
-  }
+  actualizarVista();
 });
+
+inputBusqueda.addEventListener("input", actualizarVista);
+selectTipo.addEventListener("change", actualizarVista);
 
 botonCargar.addEventListener("click", async () => {
   mensaje.textContent = "Cargando Pokémon...";
-  resultado.innerHTML = "";
+  contenedorTarjetas.innerHTML = "";
   botonCargar.disabled = true;
 
   try {
     pokemons = await obtenerTodos();
+    rellenarSelectorTipos();
     mostrarTarjetas(pokemons);
+    habilitarControles(true);
     mensaje.textContent = `Se han cargado ${pokemons.length} Pokémon.`;
   } catch (error) {
     pokemons = [];
@@ -142,3 +149,7 @@ botonCargar.addEventListener("click", async () => {
     botonCargar.disabled = false;
   }
 });
+
+/* ---------- Estado inicial ---------- */
+
+habilitarControles(false);
