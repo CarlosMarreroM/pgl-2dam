@@ -189,3 +189,52 @@ pulsa "Cargar los 151 Pokémon".
 ![Filtro fire](assets/readme/18-filtro-tipo.png)
 ![Filtro combinado](assets/readme/19-filtro-combinado.png)
 ![Selector de tipos](assets/readme/20-selector-tipos.png)
+
+## 5. Información ampliada
+
+### Panel de detalles
+Para el panel uso la etiqueta `<dialog>` de HTML. Al llamar a
+`showModal()` se abre encima de la página, con el fondo oscurecido
+(`::backdrop`) y sin poder pulsar lo que hay detrás. Se puede cerrar de tres
+formas:
+
+- Con el botón ✕ de la esquina, que llama a `close()`.
+- Pulsando en el fondo oscuro fuera del panel (compruebo que el clic ha sido
+  sobre el propio `<dialog>`).
+- Con la tecla Escape, que ya funciona sola con `showModal()`.
+
+### Datos adicionales mostrados
+Además de lo que ya salía en la tarjeta, el panel muestra:
+
+- **Experiencia base**, que viene de `base_experience`.
+- **Habilidades**, que vienen de `abilities`. Les quito los guiones y les
+  pongo la primera letra en mayúscula.
+- **Estadísticas base**, que vienen de `stats` (vida, ataque, defensa,
+  ataque especial, defensa especial y velocidad), con los nombres traducidos
+  al español.
+
+Estos datos ya los guardaba la clase `Pokemon` desde la fase 2, así que no
+hace falta ninguna petición nueva.
+
+### Cómo se sabe qué Pokémon se abre
+Cada botón "Ver detalles" lleva el id del Pokémon en un atributo
+`data-id`. En vez de poner un evento a cada uno de los 151 botones, pongo
+uno solo en el contenedor de las tarjetas (delegación de eventos). Cuando se
+hace clic, `closest(".tarjeta__boton")` comprueba si se ha pulsado un botón,
+leo su `data-id` y busco ese Pokémon en el array `pokemons` con `find`. Así
+también funciona con las tarjetas que se vuelven a crear al filtrar.
+
+### Ampliación voluntaria
+Barras visuales para las estadísticas. El ancho de cada barra es el valor
+de la estadística entre 255 (el máximo posible) en porcentaje, con un tope
+del 100 %.
+
+### Problemas encontrados y soluciones
+- **Página que se movía con el panel abierto:** bloqueo el scroll del fondo
+  mientras hay un `<dialog>` abierto (`body:has(dialog[open])`).
+
+### Capturas
+![Botón](assets/readme/21-boton-detalles.png)
+![Panel abierto](assets/readme/22-panel-abierto.png)
+![Dos tipos](assets/readme/23-panel-dos-tipos.png)
+![Móvil](assets/readme/24-panel-movil.png)

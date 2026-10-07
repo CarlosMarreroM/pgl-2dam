@@ -5,6 +5,8 @@ const botonBuscar = formulario.querySelector("button");
 const botonCargar = document.querySelector("#boton-cargar");
 const mensaje = document.querySelector("#mensaje");
 const contenedorTarjetas = document.querySelector("#tarjetas");
+const dialogoDetalles = document.querySelector("#detalles");
+const contenidoDetalles = document.querySelector("#detalles-contenido");
 
 const TOTAL_POKEMON = 151;
 let pokemons = [];
@@ -62,6 +64,10 @@ const crearTarjetaHTML = (pokemon) => {
         <span>${pokemon.altura} m</span>
         <span>${pokemon.peso} kg</span>
       </p>
+
+      <button type="button" class="tarjeta__boton" data-id="${pokemon.id}">
+        Ver detalles
+      </button>
     </article>
   `;
 };
@@ -70,6 +76,77 @@ const mostrarTarjetas = (lista) => {
   contenedorTarjetas.innerHTML = lista.map(crearTarjetaHTML).join("");
 };
 
+/* ---------- Detalles ---------- */
+
+const NOMBRES_ESTADISTICAS = {
+  hp: "Puntos de salud",
+  attack: "Ataque",
+  defense: "Defensa",
+  "special-attack": "Ataque especial",
+  "special-defense": "Defensa especial",
+  speed: "Velocidad",
+};
+
+const MAX_ESTADISTICA = 255;
+
+const formatearTexto = (texto) => capitalizar(texto.replace(/-/g, " "));
+
+const crearDetallesHTML = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
+    .join("");
+
+  const habilidadesHTML = pokemon.habilidades
+    .map((habilidad) => `<li>${formatearTexto(habilidad)}</li>`)
+    .join("");
+
+  const estadisticasHTML = pokemon.estadisticas
+    .map(({ nombre, valor }) => {
+      const porcentaje = Math.min((valor / MAX_ESTADISTICA) * 100, 100);
+      return `
+        <li class="estadistica">
+          <span class="estadistica__nombre">${NOMBRES_ESTADISTICAS[nombre] ?? nombre}</span>
+          <span class="estadistica__valor">${valor}</span>
+          <span class="estadistica__barra" aria-hidden="true">
+            <span class="estadistica__relleno" style="width: ${porcentaje}%"></span>
+          </span>
+        </li>
+      `;
+    })
+    .join("");
+
+  return `
+    <button type="button" class="detalles__cerrar" aria-label="Cerrar detalles">✕</button>
+
+    <p class="detalles__numero">N.º ${pokemon.idFormateado}</p>
+    <h2 id="detalles-titulo" class="detalles__nombre">${pokemon.nombreFormateado}</h2>
+
+    <img
+      class="detalles__imagen"
+      src="${pokemon.spriteFrontal}"
+      alt="${pokemon.nombreFormateado} visto de frente"
+    >
+
+    <div class="tarjeta__tipos">${tiposHTML}</div>
+
+    <p class="tarjeta__medidas">
+      <span><strong>Altura</strong> ${pokemon.altura} m</span>
+      <span><strong>Peso</strong> ${pokemon.peso} kg</span>
+      <span><strong>Exp. base</strong> ${pokemon.experienciaBase ?? "—"}</span>
+    </p>
+
+    <h3>Habilidades</h3>
+    <ul class="detalles__habilidades">${habilidadesHTML}</ul>
+
+    <h3>Estadísticas base</h3>
+    <ul class="detalles__estadisticas">${estadisticasHTML}</ul>
+  `;
+};
+
+const abrirDetalles = (pokemon) => {
+  contenidoDetalles.innerHTML = crearDetallesHTML(pokemon);
+  dialogoDetalles.showModal();
+};
 /* ---------- Búsqueda y filtros ---------- */
 
 const capitalizar = (texto) => texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -148,6 +225,21 @@ botonCargar.addEventListener("click", async () => {
       "No se han podido cargar los Pokémon. Comprueba tu conexión e inténtalo de nuevo.";
     botonCargar.disabled = false;
   }
+});
+
+contenedorTarjetas.addEventListener("click", (evento) => {
+  const boton = evento.target.closest(".tarjeta__boton");
+  if (!boton) return;
+
+  const pokemon = pokemons.find((p) => p.id === Number(boton.dataset.id));
+  if (pokemon) abrirDetalles(pokemon);
+});
+
+dialogoDetalles.addEventListener("click", (evento) => {
+  const pulsaCerrar = evento.target.closest(".detalles__cerrar");
+  const pulsaFondo = evento.target === dialogoDetalles;
+
+  if (pulsaCerrar || pulsaFondo) dialogoDetalles.close();
 });
 
 /* ---------- Estado inicial ---------- */
