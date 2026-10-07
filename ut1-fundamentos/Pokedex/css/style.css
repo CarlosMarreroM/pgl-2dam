@@ -13,7 +13,7 @@ body {
 }
 
 .contenedor {
-    width: min(100%, 650px);
+    width: min(100%, 1200px);
     margin: 0 auto;
 }
 
@@ -24,11 +24,15 @@ h1 {
 }
 
 .introduccion {
+    max-width: 650px;
+    margin-inline: auto;
     margin-bottom: 2rem;
     text-align: center;
 }
 
 .buscador {
+    max-width: 650px;
+    margin-inline: auto;
     padding: 1.5rem;
     background: white;
     border-radius: 1rem;
@@ -166,6 +170,158 @@ h1 {
     text-transform: capitalize;
     background: #4b5563;
     border-radius: 999px;
+}
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.tarjeta {
+    padding: 1rem;
+    text-align: center;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgb(0 0 0 / 10%);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgb(0 0 0 / 18%);
+}
+
+.tarjeta__numero {
+    margin: 0;
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.tarjeta__imagenes {
+    display: flex;
+    justify-content: center;
+    height: 140px;
+}
+
+.tarjeta__sprite {
+    width: 140px;
+    height: 140px;
+    image-rendering: pixelated;
+}
+
+.tarjeta__sprite--frontal {
+    display: none;
+}
+
+.tarjeta:hover .tarjeta__sprite--trasero {
+    display: none;
+}
+
+.tarjeta:hover .tarjeta__sprite--frontal {
+    display: block;
+}
+
+.tarjeta__nombre {
+    margin: 0.25rem 0 0.75rem;
+}
+
+.tarjeta__tipos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 2rem;
+}
+
+.tarjeta__medidas {
+    display: flex;
+    justify-content: space-around;
+    margin: 0.75rem 0 0;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.tipo--normal {
+    background: #a8a77a;
+}
+
+.tipo--fire {
+    background: #ee8130;
+}
+
+.tipo--water {
+    background: #6390f0;
+}
+
+.tipo--electric {
+    background: #f7d02c;
+}
+
+.tipo--grass {
+    background: #5aa23f;
+}
+
+.tipo--ice {
+    background: #96d9d6;
+}
+
+.tipo--fighting {
+    background: #c22e28;
+}
+
+.tipo--poison {
+    background: #a33ea1;
+}
+
+.tipo--ground {
+    background: #e2bf65;
+}
+
+.tipo--flying {
+    background: #8f9fe8;
+}
+
+.tipo--psychic {
+    background: #f95587;
+}
+
+.tipo--bug {
+    background: #8a9a16;
+}
+
+.tipo--rock {
+    background: #b6a136;
+}
+
+.tipo--ghost {
+    background: #735797;
+}
+
+.tipo--dragon {
+    background: #6f35fc;
+}
+
+.tipo--dark {
+    background: #705746;
+}
+
+.tipo--steel {
+    background: #8f8fa6;
+}
+
+.tipo--fairy {
+    background: #d685ad;
+}
+
+/* Colores claros: texto oscuro para que se lea bien */
+.tipo--electric,
+.tipo--ice,
+.tipo--ground {
+    color: #1f2937;
 }
 
 @media (max-width: 480px) {

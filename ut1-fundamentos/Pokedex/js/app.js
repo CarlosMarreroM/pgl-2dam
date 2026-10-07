@@ -4,6 +4,7 @@ const mensaje = document.querySelector("#mensaje");
 const resultado = document.querySelector("#resultado");
 const botonBuscar = formulario.querySelector("button");
 const botonCargar = document.querySelector("#boton-cargar");
+const contenedorTarjetas = document.querySelector("#tarjetas");
 
 const TOTAL_POKEMON = 151;
 let pokemons = [];
@@ -31,7 +32,7 @@ const obtenerTodos = () => {
 
 const mostrarPokemon = (pokemon) => {
   const tiposHTML = pokemon.tipos
-    .map((tipo) => `<span class="tipo">${tipo}</span>`)
+    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
     .join("");
 
   resultado.innerHTML = `
@@ -56,6 +57,44 @@ const mostrarPokemon = (pokemon) => {
       </div>
     </article>
   `;
+};
+
+const crearTarjetaHTML = (pokemon) => {
+  const tiposHTML = pokemon.tipos
+    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
+    .join("");
+
+  return `
+    <article class="tarjeta">
+      <p class="tarjeta__numero">N.º ${pokemon.idFormateado}</p>
+
+      <div class="tarjeta__imagenes">
+        <img
+          class="tarjeta__sprite tarjeta__sprite--trasero"
+          src="${pokemon.spriteTrasero}"
+          alt="${pokemon.nombreFormateado} visto de espaldas"
+        >
+        <img
+          class="tarjeta__sprite tarjeta__sprite--frontal"
+          src="${pokemon.spriteFrontal}"
+          alt="${pokemon.nombreFormateado} visto de frente"
+        >
+      </div>
+
+      <h2 class="tarjeta__nombre">${pokemon.nombreFormateado}</h2>
+
+      <div class="tarjeta__tipos">${tiposHTML}</div>
+
+      <p class="tarjeta__medidas">
+        <span>${pokemon.altura} m</span>
+        <span>${pokemon.peso} kg</span>
+      </p>
+    </article>
+  `;
+};
+
+const mostrarTarjetas = (lista) => {
+  contenedorTarjetas.innerHTML = lista.map(crearTarjetaHTML).join("");
 };
 
 formulario.addEventListener("submit", async (evento) => {
@@ -94,8 +133,8 @@ botonCargar.addEventListener("click", async () => {
 
   try {
     pokemons = await obtenerTodos();
+    mostrarTarjetas(pokemons);
     mensaje.textContent = `Se han cargado ${pokemons.length} Pokémon.`;
-    console.log(pokemons);
   } catch (error) {
     pokemons = [];
     mensaje.textContent =
