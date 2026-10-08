@@ -1,9 +1,48 @@
 # Pokédex con JavaScript
 
 **Autor:** Carlos Marrero Martin
-**Tecnologías:** HTML, CSS y JavaScript puro, PokéAPI
 
-> Memoria paso a paso del desarrollo de la actividad final.
+## Descripción
+Pokédex que consulta PokéAPI y muestra los 151 Pokémon de la primera
+generación en tarjetas. Permite buscar por nombre, número o fragmento,
+filtrar por tipo y consultar los detalles de cada Pokémon.
+
+## Tecnologías utilizadas
+HTML, CSS y JavaScript puro (sin frameworks ni librerías). Datos de
+[PokéAPI](https://pokeapi.co/).
+
+## Cómo ejecutarla
+1. Clona el repositorio: `git clone https://github.com/TU_USUARIO/pokedex.git`
+2. Abre la carpeta `pokedex`.
+3. Abre `index.html` en el navegador (o con la extensión Live Server de VS Code).
+4. Pulsa **Cargar los 151 Pokémon**. Hace falta conexión a internet.
+
+## Estructura del proyecto
+```text
+pokedex/
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── app.js
+│   └── Pokemon.js
+└── assets/
+    ├── images/
+    └── readme/
+
+```
+## Funcionalidades implementadas
+- Carga de los 151 Pokémon desde PokéAPI.
+- Tarjetas con número, nombre, tipos, altura y peso.
+- Cambio de sprite trasero/frontal al pasar el cursor, sin peticiones nuevas.
+- Búsqueda por nombre, número y fragmento.
+- Filtro por tipo, combinable con la búsqueda.
+- Panel de detalles con experiencia base, habilidades y estadísticas.
+- Gestión de estados de carga, sin resultados y errores, con reintento.
+- Diseño adaptable a móvil y escritorio.
+
+## Ampliaciones voluntarias
+- Barras visuales para las estadísticas.
 
 ## 1. Punto de partida
 
@@ -238,3 +277,71 @@ del 100 %.
 ![Panel abierto](assets/readme/22-panel-abierto.png)
 ![Dos tipos](assets/readme/23-panel-dos-tipos.png)
 ![Móvil](assets/readme/24-panel-movil.png)
+
+## 6. Gestión de estados y errores
+
+### Estados contemplados
+| Estado | Qué ve el usuario |
+|---|---|
+| Preparada para comenzar | "Pulsa «Cargar los 151 Pokémon» para empezar." y controles bloqueados |
+| Cargando | "Cargando Pokémon..." y botón desactivado |
+| Cargados | "Se han cargado 151 Pokémon." y controles activos |
+| Sin resultados | "No se ha encontrado ningún Pokémon con esa búsqueda." |
+| Error de comunicación | Mensaje explicativo y botón de carga activo para reintentar |
+
+### Cómo se gestiona
+Al pulsar el botón de carga, la petición va dentro de un `try/catch`. Antes
+de empezar muestro "Cargando Pokémon..." y desactivo el botón para que no se
+pueda pulsar dos veces. Si todo va bien, en el `try` relleno el selector de
+tipos, pinto las tarjetas y activo el buscador y el filtro. Si algo falla,
+el `catch` vacía la lista, muestra un mensaje explicando que se comprueben
+la conexión y se vuelva a intentar, y reactiva el botón.
+
+`Promise.all` es todo o nada: si falla una sola de las 151 peticiones, falla
+la carga completa y se va al `catch`. Así nunca se queda una lista a medias.
+El botón se reactiva solo en el error para poder reintentar. Si la carga va
+bien no hace falta, porque ya están todos los Pokémon.
+
+Cuando se filtra y no hay coincidencias, no es un error, sino un estado
+más: se muestra el aviso "No se ha encontrado ningún Pokémon con esa
+búsqueda.". Al abrir la página, el buscador y el selector están bloqueados
+y se indica que hay que pulsar el botón para empezar.
+
+## 7. Pruebas finales
+
+| Prueba | Resultado |
+|---|---|
+| La página carga y muestra el mensaje inicial | ✅ |
+| Los controles están bloqueados antes de cargar | ✅ |
+| Se cargan los 151 Pokémon en orden | ✅ |
+| Se muestra el estado "Cargando" | ✅ |
+| Error de conexión con mensaje y reintento | ✅ |
+| Búsqueda por nombre (`pikachu`) | ✅ |
+| Búsqueda por número (`25`, sin devolver el 125) | ✅ |
+| Búsqueda por fragmento (`char`) | ✅ |
+| Búsqueda sin resultados | ✅ |
+| Filtro por tipo | ✅ |
+| Filtro por tipo combinado con la búsqueda | ✅ |
+| Cambio de sprite al pasar el cursor | ✅ |
+| Panel de detalles (abrir y cerrar de las tres formas) | ✅ |
+| Diseño correcto en móvil | ✅ |
+
+## 8. Conclusiones
+
+### Dificultades encontradas
+Lo que más me costó fue entender cómo funciona `Promise.all` y por qué los
+resultados salen en orden aunque las peticiones terminen en momentos
+distintos. También me costó la búsqueda por número, porque con `includes`
+el 25 devolvía también el 125. Y tuve que usar la delegación de eventos
+porque las tarjetas se vuelven a crear al filtrar y los botones perdían su
+evento.
+
+### Conocimientos adquiridos
+- `fetch` y `async/await` para consultar una API y esperar la respuesta.
+- `Promise.all` para lanzar muchas peticiones a la vez.
+- `map`, `filter`, `flatMap` y `Set` para transformar y filtrar listas.
+- Clases en JavaScript, con getters para formatear los datos.
+- Delegación de eventos y atributos `data-*`.
+- La etiqueta `<dialog>` para crear un panel modal.
+- CSS Grid con `auto-fill` y `minmax` para una cuadrícula adaptable.
+- Gestión de estados de carga, sin resultados y error.

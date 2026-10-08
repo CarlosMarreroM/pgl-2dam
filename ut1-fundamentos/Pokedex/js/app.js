@@ -244,4 +244,5 @@ dialogoDetalles.addEventListener("click", (evento) => {
 
 /* ---------- Estado inicial ---------- */
 
+mensaje.textContent = "Pulsa «Cargar los 151 Pokémon» para empezar.";
 habilitarControles(false);
