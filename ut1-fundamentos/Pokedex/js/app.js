@@ -10,6 +10,7 @@ const contenidoDetalles = document.querySelector("#detalles-contenido");
 const listaEquipo = document.querySelector("#equipo-lista");
 const mensajeEquipo = document.querySelector("#equipo-mensaje");
 const botonVaciar = document.querySelector("#boton-vaciar");
+const botonAleatorio = document.querySelector("#boton-aleatorio");
 
 const TOTAL_POKEMON = 151;
 const MAX_EQUIPO = 3;
@@ -256,6 +257,44 @@ const actualizarVista = () => {
     mensaje.textContent = `Mostrando ${filtrados.length} de ${pokemons.length} Pokémon.`;
   }
 };
+
+/* ----------  Pokémon aleatorio ---------- */
+
+
+
+const obtenerPokemonAleatorio = async () => {
+  const id = Math.floor(Math.random() * (1025 - 152 + 1)) + 152;
+
+  const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+  const respuesta = await fetch(url);
+
+  if (!respuesta.ok) {
+    throw new Error("Pokémon no encontrado.");
+  }
+
+  const datos = await respuesta.json();
+  return new Pokemon(datos);
+};
+
+botonAleatorio.addEventListener("click", async () => {
+  mensaje.textContent = "Cargando Pokémon aleatorio...";
+  contenedorTarjetas.innerHTML = "";
+  botonAleatorio.disabled = true;
+
+  try {
+    const pokemonAleatorio = await obtenerPokemonAleatorio();
+    mostrarTarjetas([pokemonAleatorio]);
+    habilitarControles(true);
+    mensaje.textContent = `Se ha cargado un Pokémon aleatorio: ${pokemonAleatorio.nombreFormateado}.`;
+    botonAleatorio.disabled = false;
+    botonCargar.disabled = false;
+  } catch (error) {
+    mensaje.textContent =
+      "No se ha podido cargar el Pokémon aleatorio. Comprueba tu conexión e inténtalo de nuevo.";
+    botonAleatorio.disabled = false;
+  }
+});
+
 
 /* ---------- Eventos ---------- */
 

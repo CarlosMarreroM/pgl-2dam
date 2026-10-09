@@ -420,3 +420,34 @@ que la página no se recarga.
 ![Equipo completo](assets/readme/27-equipo-lleno.png)
 ![Equipo vaciado](assets/readme/28-equipo-vaciado.png)
 ![Equipo en móvil](assets/readme/29-equipo-movil.png)
+
+## 10. Pokémon aleatorio
+### Objetivo
+
+Añadir un botón que cargue un Pokémon aleatorio de la segunda generación
+(152-1025) y lo muestre en la zona de resultados, sin afectar al equipo ni a
+la colección de los 151 Pokémon.
+
+### Cambios realizados
+- **`index.html`**: nuevo botón `#boton-aleatorio` con el texto "Cargar Pokémon aleatorio".
+- **`js/app.js`**:
+  - Nueva constante `botonAleatorio` que apunta al botón.
+  - Nueva función `obtenerPokemonAleatorio` que genera un id aleatorio
+    entre 152 y 1025 y hace la petición a PokéAPI.
+
+### Cómo funciona
+Al pulsar el botón se desactiva y se llama a `obtenerPokemonAleatorio`. Si la petición va bien, se muestra la tarjeta del Pokémon aleatorio y se
+vuelven a activar los botones de carga. Si falla, se muestra un mensaje de error y se reactiva el botón para poder reintentar. El Pokémon aleatorio no se añade al equipo ni a la colección de los 151, y no se hace ninguna petición nueva al filtrar o buscar.
+
+### Pruebas realizadas
+| Prueba | Resultado |
+|---|---|
+| La página carga y muestra el mensaje inicial | ✅ |
+| El botón de Pokémon aleatorio está activo siempre | ✅ |
+| Se carga un Pokémon aleatorio | ✅ |
+| No se añade al equipo ni a la colección de los 151 | ✅ |
+
+### Capturas
+![Botón Pokémon aleatorio](assets/readme/30-boton-aleatorio.png)
+![Pokémon aleatorio](assets/readme/31-pokemon-cargado-aleatorio.png)  
+![Movil](assets/readme/32-aleatorio-movil.png)

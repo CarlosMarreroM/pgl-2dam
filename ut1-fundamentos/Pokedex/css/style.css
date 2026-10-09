@@ -130,6 +130,27 @@ h1 {
     cursor: not-allowed;
 }
 
+.boton-aleatorio {
+    display: block;
+    margin: 1.5rem auto 0;
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: 0.5rem;
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    background: #16a204;
+    cursor: pointer;
+}
+.boton-aleatorio:hover:not(:disabled) {
+    background: #0a7704;
+}
+
+.boton-aleatorio:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
 .mensaje {
     min-height: 1.5rem;
     margin: 1.5rem 0;
