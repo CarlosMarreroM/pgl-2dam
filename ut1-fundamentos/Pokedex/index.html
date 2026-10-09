@@ -12,9 +12,8 @@
 
     <p class="introduccion">
       Carga los 151 Pokémon de la primera generación y búscalos por nombre,
-      número o parte del nombre. Filtra por tipo y pulsa «Ver detalles»
-      para ver sus estadísticas.
-
+      número o parte del nombre. Filtra por tipo, pulsa «Ver detalles»
+      para ver sus estadísticas y añade hasta tres a tu equipo.
     </p>
 
     <form id="formulario-busqueda" class="buscador">
@@ -45,7 +44,19 @@
     <p id="mensaje" class="mensaje" aria-live="polite"></p>
 
     <section id="resultado" class="resultado"></section>
-    
+
+    <section id="equipo" class="equipo" aria-labelledby="equipo-titulo">
+      <h2 id="equipo-titulo">Mi equipo</h2>
+
+      <div id="equipo-lista" class="equipo__lista"></div>
+
+      <p id="equipo-mensaje" class="equipo__mensaje" aria-live="polite"></p>
+
+      <button id="boton-vaciar" type="button" class="equipo__vaciar">
+        Vaciar equipo
+      </button>
+    </section>
+
     <section id="tarjetas" class="tarjetas" aria-label="Lista de Pokémon"></section>
 
     <dialog id="detalles" class="detalles" aria-labelledby="detalles-titulo">

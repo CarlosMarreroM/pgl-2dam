@@ -7,9 +7,14 @@ const mensaje = document.querySelector("#mensaje");
 const contenedorTarjetas = document.querySelector("#tarjetas");
 const dialogoDetalles = document.querySelector("#detalles");
 const contenidoDetalles = document.querySelector("#detalles-contenido");
+const listaEquipo = document.querySelector("#equipo-lista");
+const mensajeEquipo = document.querySelector("#equipo-mensaje");
+const botonVaciar = document.querySelector("#boton-vaciar");
 
 const TOTAL_POKEMON = 151;
+const MAX_EQUIPO = 3;
 let pokemons = [];
+let equipo = [];
 
 /* ---------- Datos ---------- */
 
@@ -34,10 +39,13 @@ const obtenerTodos = () => {
 
 /* ---------- Tarjetas ---------- */
 
-const crearTarjetaHTML = (pokemon) => {
-  const tiposHTML = pokemon.tipos
+const crearTiposHTML = (pokemon) =>
+  pokemon.tipos
     .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
     .join("");
+
+const crearTarjetaHTML = (pokemon) => {
+  const tiposHTML = crearTiposHTML(pokemon);
 
   return `
     <article class="tarjeta">
@@ -68,6 +76,10 @@ const crearTarjetaHTML = (pokemon) => {
       <button type="button" class="tarjeta__boton" data-id="${pokemon.id}">
         Ver detalles
       </button>
+
+      <button type="button" class="tarjeta__boton tarjeta__boton--equipo" data-id="${pokemon.id}">
+        Añadir al equipo
+      </button>
     </article>
   `;
 };
@@ -92,9 +104,7 @@ const MAX_ESTADISTICA = 255;
 const formatearTexto = (texto) => capitalizar(texto.replace(/-/g, " "));
 
 const crearDetallesHTML = (pokemon) => {
-  const tiposHTML = pokemon.tipos
-    .map((tipo) => `<span class="tipo tipo--${tipo}">${tipo}</span>`)
-    .join("");
+  const tiposHTML = crearTiposHTML(pokemon);
 
   const habilidadesHTML = pokemon.habilidades
     .map((habilidad) => `<li>${formatearTexto(habilidad)}</li>`)
@@ -147,6 +157,55 @@ const abrirDetalles = (pokemon) => {
   contenidoDetalles.innerHTML = crearDetallesHTML(pokemon);
   dialogoDetalles.showModal();
 };
+
+/* ---------- Mi equipo ---------- */
+
+const crearMiembroHTML = (pokemon) => `
+  <article class="miembro">
+    <p class="miembro__numero">N.º ${pokemon.idFormateado}</p>
+    <img
+      class="miembro__sprite"
+      src="${pokemon.spriteFrontal}"
+      alt="${pokemon.nombreFormateado} visto de frente"
+    >
+    <h3 class="miembro__nombre">${pokemon.nombreFormateado}</h3>
+    <div class="tarjeta__tipos">${crearTiposHTML(pokemon)}</div>
+  </article>
+`;
+
+const mostrarEquipo = () => {
+  if (equipo.length === 0) {
+    listaEquipo.innerHTML =
+      '<p class="equipo__vacio">Todavía no has añadido ningún Pokémon.</p>';
+  } else {
+    listaEquipo.innerHTML = equipo.map(crearMiembroHTML).join("");
+  }
+
+  botonVaciar.disabled = equipo.length === 0;
+};
+
+const agregarAlEquipo = (pokemon) => {
+  if (equipo.some((miembro) => miembro.id === pokemon.id)) {
+    mensajeEquipo.textContent = `${pokemon.nombreFormateado} ya está en tu equipo.`;
+    return;
+  }
+
+  if (equipo.length >= MAX_EQUIPO) {
+    mensajeEquipo.textContent = `Tu equipo ya tiene ${MAX_EQUIPO} Pokémon. Vacíalo para elegir otros.`;
+    return;
+  }
+
+  equipo.push(pokemon);
+  mostrarEquipo();
+  mensajeEquipo.textContent = `${pokemon.nombreFormateado} se ha añadido a tu equipo.`;
+};
+
+const vaciarEquipo = () => {
+  equipo = [];
+  mostrarEquipo();
+  mensajeEquipo.textContent = "Se ha vaciado el equipo.";
+};
+
 /* ---------- Búsqueda y filtros ---------- */
 
 const capitalizar = (texto) => texto.charAt(0).toUpperCase() + texto.slice(1);
@@ -232,8 +291,16 @@ contenedorTarjetas.addEventListener("click", (evento) => {
   if (!boton) return;
 
   const pokemon = pokemons.find((p) => p.id === Number(boton.dataset.id));
-  if (pokemon) abrirDetalles(pokemon);
+  if (!pokemon) return;
+
+  if (boton.classList.contains("tarjeta__boton--equipo")) {
+    agregarAlEquipo(pokemon);
+  } else {
+    abrirDetalles(pokemon);
+  }
 });
+
+botonVaciar.addEventListener("click", vaciarEquipo);
 
 dialogoDetalles.addEventListener("click", (evento) => {
   const pulsaCerrar = evento.target.closest(".detalles__cerrar");
@@ -246,3 +313,4 @@ dialogoDetalles.addEventListener("click", (evento) => {
 
 mensaje.textContent = "Pulsa «Cargar los 151 Pokémon» para empezar.";
 habilitarControles(false);
+mostrarEquipo();

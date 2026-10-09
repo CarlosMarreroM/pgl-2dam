@@ -314,10 +314,101 @@ h1 {
     background: #b91c1c;
 }
 
+.tarjeta__boton--equipo {
+    margin-top: 0.5rem;
+    background: #1f2937;
+}
+
+.tarjeta__boton--equipo:hover {
+    background: #374151;
+}
+
 .tarjeta__boton:focus-visible,
+.equipo__vaciar:focus-visible,
 .detalles__cerrar:focus-visible {
     outline: 3px solid #1f2937;
     outline-offset: 2px;
+}
+
+/* ---------- Mi equipo ---------- */
+
+.equipo {
+    max-width: 650px;
+    margin-inline: auto;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
+}
+
+.equipo h2 {
+    margin: 0 0 1rem;
+    text-align: center;
+}
+
+.equipo__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    gap: 1rem;
+}
+
+.equipo__vacio {
+    grid-column: 1 / -1;
+    margin: 0;
+    text-align: center;
+    color: #6b7280;
+}
+
+.miembro {
+    padding: 0.75rem;
+    text-align: center;
+    background: #f3f4f6;
+    border-radius: 0.75rem;
+}
+
+.miembro__numero {
+    margin: 0;
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.miembro__sprite {
+    width: 96px;
+    height: 96px;
+    image-rendering: pixelated;
+}
+
+.miembro__nombre {
+    margin: 0 0 0.5rem;
+}
+
+.equipo__mensaje {
+    min-height: 1.5rem;
+    margin: 1rem 0 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.equipo__vaciar {
+    display: block;
+    margin: 0.5rem auto 0;
+    padding: 0.75rem 1.25rem;
+    border: 0;
+    border-radius: 0.5rem;
+    color: white;
+    font: inherit;
+    font-weight: bold;
+    background: #dc2626;
+    cursor: pointer;
+}
+
+.equipo__vaciar:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+.equipo__vaciar:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
 }
 
 /* ---------- Panel de detalles ---------- */

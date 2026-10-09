@@ -5,7 +5,8 @@
 ## Descripción
 Pokédex que consulta PokéAPI y muestra los 151 Pokémon de la primera
 generación en tarjetas. Permite buscar por nombre, número o fragmento,
-filtrar por tipo y consultar los detalles de cada Pokémon.
+filtrar por tipo, consultar los detalles de cada Pokémon y formar un
+equipo de hasta tres.
 
 ## Tecnologías utilizadas
 HTML, CSS y JavaScript puro (sin frameworks ni librerías). Datos de
@@ -38,6 +39,8 @@ pokedex/
 - Búsqueda por nombre, número y fragmento.
 - Filtro por tipo, combinable con la búsqueda.
 - Panel de detalles con experiencia base, habilidades y estadísticas.
+- Zona «Mi equipo» con un máximo de tres Pokémon, sin repetidos y con un
+  botón para vaciarla.
 - Gestión de estados de carga, sin resultados y errores, con reintento.
 - Diseño adaptable a móvil y escritorio.
 
@@ -345,3 +348,75 @@ evento.
 - La etiqueta `<dialog>` para crear un panel modal.
 - CSS Grid con `auto-fill` y `minmax` para una cuadrícula adaptable.
 - Gestión de estados de carga, sin resultados y error.
+
+## 9. Mi equipo
+
+### Objetivo
+Zona básica llamada «Mi equipo» donde se pueden guardar hasta tres Pokémon
+de la colección ya cargada.
+
+### Cambios realizados
+- **`index.html`**: nueva sección `#equipo` con el título, el contenedor
+  `#equipo-lista`, un párrafo `#equipo-mensaje` para los avisos y el botón
+  `#boton-vaciar`.
+- **`js/app.js`**:
+  - Constante `MAX_EQUIPO = 3` y array `equipo`, separado de `pokemons`.
+  - Cada tarjeta tiene un segundo botón, «Añadir al equipo», con la clase
+    `tarjeta__boton--equipo` y el mismo `data-id` que «Ver detalles».
+  - Funciones `agregarAlEquipo`, `vaciarEquipo`, `mostrarEquipo` y
+    `crearMiembroHTML`.
+  - Función `crearTiposHTML` para generar las etiquetas de tipo. Antes ese
+    código estaba repetido en la tarjeta y en el panel de detalles, y ahora
+    también lo usa el equipo.
+- **`css/style.css`**: estilos de la zona del equipo y del nuevo botón,
+  siguiendo los colores del resto de la página.
+
+### Cómo funciona
+**Añadir.** Aprovecho la delegación de eventos que ya había en el
+contenedor de las tarjetas. Al hacer clic busco el Pokémon por su `data-id`
+en el array `pokemons` y miro la clase del botón: si es
+`tarjeta__boton--equipo` llamo a `agregarAlEquipo`, y si no, abro los
+detalles como antes. `agregarAlEquipo` hace dos comprobaciones antes de
+hacer `push` en el array:
+
+1. **Sin repetidos:** con `equipo.some(...)` compruebo si ya hay un miembro
+   con el mismo `id`. Si lo hay, muestro «Pikachu ya está en tu equipo.» y
+   no lo añado.
+2. **Máximo de tres:** si `equipo.length` ya es `MAX_EQUIPO`, muestro un
+   aviso y no lo añado.
+
+**Mostrar.** `mostrarEquipo` vuelve a pintar la zona a partir del array con
+`map` + `join("")`, igual que las tarjetas. De cada miembro se ve el
+número, el nombre, el sprite frontal y los tipos, directamente en el
+equipo, sin abrir el panel de detalles. Si el array está vacío muestra
+«Todavía no has añadido ningún Pokémon.» y desactiva el botón de vaciar.
+
+**Vaciar.** `vaciarEquipo` asigna un array vacío a `equipo` y llama a
+`mostrarEquipo` para que la vista se actualice.
+
+**Sin peticiones nuevas.** El equipo guarda los mismos objetos `Pokemon`
+que ya están en `pokemons`, así que no hace falta pedir nada más a PokéAPI.
+Los botones son `type="button"` y no están dentro de un formulario, por lo
+que la página no se recarga.
+
+### Pruebas realizadas
+| Prueba | Resultado |
+|---|---|
+| Cada una de las 151 tarjetas tiene el botón «Añadir al equipo» | ✅ |
+| Al añadir un Pokémon aparece su número, nombre, sprite y tipos | ✅ |
+| Añadir no abre el panel de detalles | ✅ |
+| «Ver detalles» sigue funcionando y no añade al equipo | ✅ |
+| No se puede añadir dos veces el mismo Pokémon | ✅ |
+| No se puede añadir un cuarto Pokémon | ✅ |
+| «Vaciar equipo» deja el equipo vacío y actualiza la vista | ✅ |
+| Después de vaciar se pueden volver a añadir Pokémon | ✅ |
+| Añadir y vaciar no hacen peticiones a PokéAPI (pestaña Red) | ✅ |
+| La página no se recarga | ✅ |
+| Se ve bien en móvil | ✅ |
+
+### Capturas
+![Botón añadir al equipo](assets/readme/25-boton-equipo.png)
+![Pokémon repetido](assets/readme/26-equipo-repetido.png)
+![Equipo completo](assets/readme/27-equipo-lleno.png)
+![Equipo vaciado](assets/readme/28-equipo-vaciado.png)
+![Equipo en móvil](assets/readme/29-equipo-movil.png)
