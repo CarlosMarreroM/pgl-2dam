@@ -1,0 +1,49 @@
+/* Variables globales: colores reutilizables en toda la app */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --text: #4b5563;
+  --text-h: #111827;
+  --border: #e5e7eb;
+  --accent: #7c3aed;
+  --on-accent: #ffffff;
+  --success: #15803d;
+  --success-bg: #dcfce7;
+  --danger: #b91c1c;
+  --danger-bg: #fee2e2;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+}
+
+/* Modo oscuro: solo cambiamos el valor de las variables */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111318;
+    --surface: #1c1f26;
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --border: #2e323c;
+    --accent: #a78bfa;
+    --on-accent: #1a1033;
+    --success: #4ade80;
+    --success-bg: rgba(74, 222, 128, 0.12);
+    --danger: #f87171;
+    --danger-bg: rgba(248, 113, 113, 0.12);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
