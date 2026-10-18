@@ -1,4 +1,4 @@
-import './App.css'
+import Button from "./components/Button";
 import GameCard from "./components/GameCard";
 import { useState } from "react";
 
@@ -43,10 +43,11 @@ function App() {
   }
 
   return (
-    <main className="app">
-      <h1>GameShelf</h1>
-      <p>Mi catálogo de videojuegos</p>
-      <section className="catalog">
+    <main className="max-w-275 mx-auto px-4 py-12">
+      <h1 className="text-[2.5rem] font-bold text-accent text-center">GameShelf</h1>
+      <p className="mt-2 mb-8 text-center">Mi catálogo de videojuegos</p>
+      {/* Rejilla de tarjetas: se ajusta sola al ancho de la pantalla */}
+      <section className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5">
         {visibleGames.map((game) => (
           <GameCard
             key={game.id}
@@ -58,13 +59,13 @@ function App() {
         ))}
       </section>
 
-      <div className="actions">
-        <button className="btn" onClick={() => setOnlyAvailable(!onlyAvailable)}>
+      <div className="flex flex-wrap justify-center gap-3 mt-8">
+        <Button onClick={() => setOnlyAvailable(!onlyAvailable)}>
           {onlyAvailable ? "Mostrar todos" : "Mostrar disponibles"}
-        </button>
-        <button className="btn" onClick={() => setOnlyCheap(!onlyCheap)}>
+        </Button>
+        <Button onClick={() => setOnlyCheap(!onlyCheap)}>
           {onlyCheap ? "Todos los precios" : "Menos de 15 €"}
-        </button>
+        </Button>
       </div>
 
     </main>

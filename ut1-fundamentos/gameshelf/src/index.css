@@ -1,3 +1,21 @@
+@import "tailwindcss";
+
+/* Expone las variables de abajo como colores de Tailwind (bg-accent, text-text-h...) */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-text-h: var(--text-h);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --shadow-card: var(--shadow);
+}
+
 /* Variables globales: colores reutilizables en toda la app */
 :root {
   --bg: #f4f5f7;
@@ -14,7 +32,6 @@
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.5;
   color: var(--text);
   background: var(--bg);
   color-scheme: light dark;
@@ -36,14 +53,4 @@
     --danger-bg: rgba(248, 113, 113, 0.12);
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
 }
